@@ -10,13 +10,22 @@ import java.util.ArrayList;
  */
 public class Rook extends Piece
 {
+    private final int[][] offsets = {{1,0},{0,1},{0,-1},{-1,0}};
     public Rook(int row, int col, int color, ChessModel model)
     {
         super(row, col, color, model);
     }
 
     @Override
-    public ArrayList<Position> getValidMoves() {
-        return new ArrayList<Position>();
+    public ArrayList<Position> getValidMoves()
+    {
+        ArrayList<Position> validMoves = new ArrayList<Position>();
+        int currentRow = currentPos.row;
+        int currentCol = currentPos.col;
+        for (int[] offset: offsets)
+        {
+            validMoves.addAll(getValidMultiple(offset[0],offset[1],currentRow,currentCol));
+        }
+        return validMoves;
     }
 }

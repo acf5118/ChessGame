@@ -30,22 +30,26 @@ public class Pawn extends Piece
      * @param startRow - the start row for a pawn of black or white
      * @return the set of valid moves
      */
-    public ArrayList<Position> getValidMoves(int offset, int startRow)
+    private ArrayList<Position> getValidMoves(int offset, int startRow)
     {
         ArrayList<Position> validMoves = new ArrayList<Position>();
         int currentRow = currentPos.row;
         int currentCol = currentPos.col;
         System.out.println("Row: " + currentRow + " Col: " + currentCol);
         System.out.println("Offset: " + offset);
+
         // If there is not a piece blocking you
-        if (model.getPieceAt(currentRow + offset, currentCol) == null)
+        if (model.getPieceAt(currentRow + offset, currentCol) != null &&
+            model.getPieceAt(currentRow + offset, currentCol).isEmpty)
         {
             validMoves.add(new Position(currentRow + offset, currentCol));
         }
         // Can move forward two at the start [given same conditions above]
+        // if the pawn is at the starting position the piece returned from getPieceAt
+        // cannot be null.
         if (currentRow == startRow &&
-                (model.getPieceAt(currentRow + offset, currentCol) == null) &&
-                (model.getPieceAt(currentRow + offset*2, currentCol) == null))
+                (model.getPieceAt(currentRow + offset, currentCol).isEmpty) &&
+                (model.getPieceAt(currentRow + offset*2, currentCol).isEmpty))
         {
             validMoves.add(new Position(currentRow + offset*2, currentCol));
         }
@@ -53,11 +57,11 @@ public class Pawn extends Piece
         Piece leftAdjacent = model.getPieceAt(currentRow + offset, currentCol + offset);
         Piece rightAdjacent = model.getPieceAt(currentRow + offset, currentCol - offset);
 
-        if ((leftAdjacent != null) && leftAdjacent.color != this.color)
+        if (leftAdjacent != null && (leftAdjacent.isEmpty || leftAdjacent.color != this.color))
         {
             validMoves.add(new Position(currentRow + offset, currentCol + offset));
         }
-        if ((rightAdjacent != null) && rightAdjacent.color != this.color)
+        if (rightAdjacent != null && (rightAdjacent.isEmpty || rightAdjacent.color != this.color))
         {
             validMoves.add(new Position(currentRow + offset, currentCol - offset));
         }
