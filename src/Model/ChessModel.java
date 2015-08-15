@@ -114,8 +114,8 @@ public class ChessModel implements ViewListener
         board[7][0] = new Rook(7,0,1, this);
         board[7][1] = new Knight(7,1,1, this);
         board[7][2] = new Bishop(7,2,1, this);
-        board[7][3] = new King(7,3,1, this);
-        board[7][4] = new Queen(7,4,1, this);
+        board[7][3] = new Queen(7,3,1, this);
+        board[7][4] = new King(7,4,1, this);
         board[7][5] = new Bishop(7,5,1, this);
         board[7][6] = new Knight(7,6,1, this);
         board[7][7] = new Rook(7,7,1, this);
@@ -125,6 +125,13 @@ public class ChessModel implements ViewListener
             board[6][i] = new Pawn(6,i,1, this);
         }
 
+        for (int i = 2; i < 6; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                board[i][j] = new Empty(i,j);
+            }
+        }
 		update();
 	}
 
@@ -138,8 +145,7 @@ public class ChessModel implements ViewListener
 	{
 		// which piece the player has selected
 		Piece piece = board[start.row][start.col];
-		// null for an empty spot
-		board[start.row][start.col] = null;
+		board[start.row][start.col] = new Empty(start.row,start.col);
 		board[end.row][end.col] = piece;
         piece.setCurrentPos(end.row, end.col);
 		
@@ -216,13 +222,19 @@ public class ChessModel implements ViewListener
      */
     public Piece getPieceAt(int row, int col)
     {
+        if (row < 0 || row > 7 || col < 0 || col > 7)
+        {
+            return null;
+        }
         return board[row][col];
     }
 
     public void getValidMoves(int row, int col)
     {
         System.out.println("Getting Valid");
-        if ( board[row][col] != null)
+        // It is not possible for this to return null since any
+        // square a user clicks will have proper row and col values
+        if (!getPieceAt(row,col).isEmpty)
         {
             currentPiece = board[row][col];
             System.out.println(currentPiece.pieceName);
