@@ -4,24 +4,9 @@ import Model.Position;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.HashMap;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-
-
-/**
- * Client.ChessView.java
- *
- * Version:
- * $Id$
- * 
- * Revision:
- * $Log$
- */
+import javax.swing.*;
+import javax.swing.border.Border;
 
 /**
  * @author Adam Fowles
@@ -31,129 +16,6 @@ import javax.swing.JFrame;
 public class ChessView extends JFrame 
 {
 
-	private class Tile extends JButton
-	{
-		// Whether or not the tile has a piece
-		private boolean hasPiece;
-		// The chess piece this tile has
-		private PieceEnum piece;
-		private int pieceColor;
-		private ChessView board;
-        // The tiles position
-        public Position position;
-		
-		public Tile(int color, ChessView cv, int row, int col)
-		{
-			hasPiece = false;
-            position = new Position(row, col);
-			board = cv;
-			if (color == 0) 
-			{
-				setBackground(new Color(255,222,173));
-			}
-			else 
-			{
-				setBackground(new Color(255,165,0));
-			}
-			addActionListener(new TileActionListener());
-		}
-		
-		/**
-		 * The action listener that handles all clicking actions related to tiles on the board
-		 * @author Adam Fowles
-		 *
-		 */
-		private class TileActionListener implements ActionListener
-		{
-			public void actionPerformed(ActionEvent event) 
-			{
-				// If it is not your turn (this chess views turn)
-                // do nothing.
-				if (!board.isTurn()) {return;}
-				// If the tile has a piece that is your color
-				if (hasPiece && (pieceColor == board.getId()))
-				{
-					board.setPieceSelected(Tile.this);
-                    board.calculateValidMoves(Tile.this);
-					return;
-				}
-                if (board.isPieceClicked())
-                {
-                    // At this point you are trying to make a second move,
-                    // try to make that move.
-                    board.validateMove(Tile.this);
-
-                }
-			}
-		}
-
-        /**
-         * Method to visually put a piece on a tile
-         * by assigning the buttons image to be a chess piece.
-         * @param p - the type of piece
-         * @param pc - the color of the piece
-         */
-		public void putPiece(PieceEnum p, int pc)
-		{
-            pieceColor = pc;
-            String player = pc == 0 ? "W": "B";
-			String r = "";
-			switch(p) 
-			{
-			case KING:
-				r = "Resources/King-" + player + ".png";
-				this.piece = PieceEnum.KING;
-				break;
-			case QUEEN:
-				r = "Resources/Queen-" + player + ".png";
-				this.piece = PieceEnum.QUEEN;
-				break;
-			case ROOK:
-				r = "Resources/Rook-" + player + ".png";
-				this.piece = PieceEnum.ROOK;
-				break;
-			case PAWN:
-				r = "Resources/Pawn-" + player + ".png";
-				this.piece = PieceEnum.PAWN;
-				break;
-			case BISHOP:
-				r = "Resources/Bishop-" + player + ".png";
-				this.piece = PieceEnum.BISHOP;
-				break;
-			case KNIGHT:
-				r = "Resources/Knight-" + player + ".png";
-				this.piece = PieceEnum.KNIGHT;
-				break;
-			default:
-				// Needs error checking
-				break;
-			}
-
-			setIcon(new ImageIcon(r));
-			hasPiece = true;
-		}
-
-        /**
-         * Opposite method from putPiece, removes
-         * the image from the tile.
-         */
-		public void removePiece() 
-		{
-			setIcon(null);
-			hasPiece = false;
-		}
-
-        // Access methods
-		public PieceEnum getPiece()
-		{
-			return piece;
-		}
-		public int getPieceColor()
-		{
-			return pieceColor;
-		}
-	}
-	
 	private Tile[][] board;
 	private int id;
 	private int player, oppenent;
@@ -183,6 +45,8 @@ public class ChessView extends JFrame
 			t--;
 		}
 
+        Color c = new Color(255, 252, 31);
+        Border b = BorderFactory.createLineBorder(c,2);
         int colorSwitch = 0;
         for (int i = 0; i < 8; i++)
         {
@@ -190,11 +54,11 @@ public class ChessView extends JFrame
             {
                 if (colorSwitch % 2 == 0)
                 {
-                    board[i][j] = new Tile(0, this, i, j);
+                    board[i][j] = new Tile(0, this, i, j, b);
                 }
                 else
                 {
-                    board[i][j] = new Tile(1, this, i, j);
+                    board[i][j] = new Tile(1, this, i, j, b);
                 }
                 add(board[i][j]);
                 colorSwitch++;
@@ -279,11 +143,17 @@ public class ChessView extends JFrame
 	 * Set the selected piece on the board
 	 * @param t - the tile that was clicked
 	 */
-	public void setPieceSelected(Tile t) 
-	{ 
-		pieceSelected = t.piece;
+	public boolean setPieceSelected(Tile t)
+	{
+        if (currentTile != null)
+        {
+            if(currentTile.equals(t)){return false;}
+            currentTile.clearBorder();
+        }
+		pieceSelected = t.getPiece();
 		pieceClicked = true;
 		currentTile = t;
+        return true;
 	}
 
 	/**
@@ -377,6 +247,7 @@ public class ChessView extends JFrame
         }
 
         data.validateMove(end);
+        currentTile.clearBorder();
         currentTile = null;
         pieceClicked = false;
     }
