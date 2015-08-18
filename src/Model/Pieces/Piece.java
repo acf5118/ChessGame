@@ -1,13 +1,4 @@
-package Model.Pieces; /**
- * Model.Pieces.Model.Pieces.java
- *
- * Version:
- * $Id$
- * 
- * Revision:
- * $Log$
- */
-
+package Model.Pieces;
 import Model.Position;
 import Model.ChessModel;
 import java.util.ArrayList;
@@ -34,33 +25,45 @@ public abstract class Piece
         isEmpty = false;
     }
 
-    public Piece(int row, int col){isEmpty = true;}
+    /**
+     * Default constructor for an "empty" piece.
+     * @param row - current row
+     * @param col - current column
+     */
+    public Piece(int row, int col)
+    {
+        currentPos = new Position(row, col);
+        isEmpty = true;
+    }
 
     /**
-     * Gets the valid moves for a piece that can move multiple positions
+     * Gets the valid moves for a piece that can move multiple positions.
+     * See child class for list of offsets
      * @param rowOffset - up or down the row
      * @param colOffset - up or down the column
      * @param currentCol - current column position of the piece
      * @param currentRow - current row position of the piece
-     * @return a list of positions
+     * @return a list of positions in a single direction that can be moved to.
      */
     protected ArrayList<Position> getValidMultiple(int rowOffset, int colOffset,
                                                         int currentRow, int currentCol)
     {
-        System.out.println("Current Row: " + currentRow + "Current Col: " + currentCol);
         ArrayList<Position> validMoves = new ArrayList<Position>();
         int row = currentRow + rowOffset;
         int col = currentCol + colOffset;
+        // Check every square in a direction that is on the game board
         while (model.getPieceAt(row,col) != null)
         {
-            System.out.println("row: " + row + "col: " + col);
+            // If there is nothing there it is a valid spot to move
             if (model.getPieceAt(row, col).isEmpty)
             {
                 validMoves.add(new Position(row, col));
             }
+            // If there a piece blocking but that piece is of the opposite color it is valid
             else if (model.getPieceAt(row, col).color != this.color)
             {
                 validMoves.add(new Position(row,col));
+                // cannot continue past the piece however
                 break;
             }
             else
@@ -73,6 +76,7 @@ public abstract class Piece
         return validMoves;
     }
 
+    // All pieces must implement get valid moves
     public abstract ArrayList<Position> getValidMoves();
     public Position getCurrentPos(){return currentPos;}
     public void setCurrentPos(int row, int col){currentPos = new Position(row, col);}

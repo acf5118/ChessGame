@@ -4,18 +4,7 @@ import Client.ViewListener;
 import Client.ViewProxy;
 import Model.Pieces.*;
 
-
 import java.util.ArrayList;
-
-/**
- * Model.ChessModel.java
- *
- * Version:
- * $Id$
- * 
- * Revision:
- * $Log$
- */
 
 /**
  * @author Adam Fowles
@@ -23,13 +12,12 @@ import java.util.ArrayList;
  */
 public class ChessModel implements ViewListener
 {
-
-	// Private fields
-	private ModelListener[] players;
+    private ModelListener[] players;
 	private String[] names;
 	private int whoseTurn,winnerId,numPlayers;
 	private boolean finished;
 	private Piece[][] board;
+    private King[] kings;
     // Store the current 'valid moves' to check against when a player
     // clicks a square to move the piece
     private Piece currentPiece;
@@ -44,6 +32,7 @@ public class ChessModel implements ViewListener
 		finished = false;
 		numPlayers = 0;
 		board = new Piece[8][8];
+        kings = new King[2];
 	}
 
 	/**
@@ -83,7 +72,6 @@ public class ChessModel implements ViewListener
 			// Send the scores for both players
 			// send whose turn it is
 			p.turn(whoseTurn);
-			//p.turn(whoseTurn);
 		}	
 	}
 	
@@ -102,7 +90,9 @@ public class ChessModel implements ViewListener
         board[0][1] = new Knight(0,1,0, this);
         board[0][2] = new Bishop(0,2,0, this);
         board[0][3] = new Queen(0,3,0, this);
-        board[0][4] = new King(0,4,0, this);
+
+        kings[0] = new King(0,4,0, this);
+        board[0][4] = kings[0];
         board[0][5] = new Bishop(0,5,0, this);
         board[0][6] = new Knight(0,6,0, this);
         board[0][7] = new Rook(0,7,0, this);
@@ -115,7 +105,8 @@ public class ChessModel implements ViewListener
         board[7][1] = new Knight(7,1,1, this);
         board[7][2] = new Bishop(7,2,1, this);
         board[7][3] = new Queen(7,3,1, this);
-        board[7][4] = new King(7,4,1, this);
+        kings[1] = new King(7,4,1, this);
+        board[7][4] = kings[1];
         board[7][5] = new Bishop(7,5,1, this);
         board[7][6] = new Knight(7,6,1, this);
         board[7][7] = new Rook(7,7,1, this);
@@ -143,12 +134,28 @@ public class ChessModel implements ViewListener
 	 */
 	public synchronized void move(Position start, Position end)
 	{
+
 		// which piece the player has selected
 		Piece piece = board[start.row][start.col];
 		board[start.row][start.col] = new Empty(start.row,start.col);
 		board[end.row][end.col] = piece;
         piece.setCurrentPos(end.row, end.col);
-		
+        // If the other players king is in check
+        if (inCheck(kings[1 - piece.color]))
+        {
+            System.out.println("Other play is in check");
+            //TODO let the player know
+        }
+        // if your king is in check move is invalid still
+        if (inCheck(kings[piece.color]))
+        {
+            System.out.println("check king invalid");
+            // undo everything
+            board[start.row][start.col] = piece;
+            board[end.row][end.col] = new Empty(end.row,end.col);
+            piece.setCurrentPos(start.row, start.col);
+            return;
+        }
 		if (finished())
 		{
 			for (ModelListener m: players)
@@ -218,7 +225,7 @@ public class ChessModel implements ViewListener
      * Get the piece at the row col index
      * @param row - row index
      * @param col - col index
-     * @return the chess Piece at that position or null if no piece is there
+     * @return the chess Piece at that position or null if the spot is outside the board
      */
     public Piece getPieceAt(int row, int col)
     {
@@ -254,6 +261,7 @@ public class ChessModel implements ViewListener
     {
         System.out.println("Validating");
         // It is a valid move
+
         if (currentValidMoves.contains(p))
         {
             System.out.println("Moves valid");
@@ -264,6 +272,26 @@ public class ChessModel implements ViewListener
             System.out.println("Not valid");
             //TODO send some info back to let the player know it wasn't a valid move
         }
+    }
+
+    public boolean inCheck(King k)
+    {
+        int numCheck = 0;
+        for (Piece[] col: board)
+        {
+            for (Piece p: col)
+            {
+                if (!p.isEmpty && p.color != k.color)
+                {
+                    if(p.getValidMoves().contains(k.getCurrentPos()))
+                    {
+                        numCheck++;
+                        System.out.println("King in check");
+                    }
+                }
+            }
+        }
+        return numCheck != 0;
     }
 
 

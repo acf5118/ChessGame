@@ -35,8 +35,6 @@ public class Pawn extends Piece
         ArrayList<Position> validMoves = new ArrayList<Position>();
         int currentRow = currentPos.row;
         int currentCol = currentPos.col;
-        System.out.println("Row: " + currentRow + " Col: " + currentCol);
-        System.out.println("Offset: " + offset);
 
         // If there is not a piece blocking you
         if (model.getPieceAt(currentRow + offset, currentCol) != null &&
@@ -57,11 +55,12 @@ public class Pawn extends Piece
         Piece leftAdjacent = model.getPieceAt(currentRow + offset, currentCol + offset);
         Piece rightAdjacent = model.getPieceAt(currentRow + offset, currentCol - offset);
 
-        if (leftAdjacent != null && (leftAdjacent.isEmpty || leftAdjacent.color != this.color))
+        // If the piece diagonal ahead is not off the board (null) and is not empty and has a different color
+        if (leftAdjacent != null && (!leftAdjacent.isEmpty && leftAdjacent.color != this.color))
         {
             validMoves.add(new Position(currentRow + offset, currentCol + offset));
         }
-        if (rightAdjacent != null && (rightAdjacent.isEmpty || rightAdjacent.color != this.color))
+        if (rightAdjacent != null && (!rightAdjacent.isEmpty && rightAdjacent.color != this.color))
         {
             validMoves.add(new Position(currentRow + offset, currentCol - offset));
         }

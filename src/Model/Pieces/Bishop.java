@@ -2,7 +2,6 @@ package Model.Pieces;
 
 import Model.ChessModel;
 import Model.Position;
-
 import java.util.ArrayList;
 
 /**
