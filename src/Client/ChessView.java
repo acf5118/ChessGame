@@ -192,6 +192,7 @@ public class ChessView extends JFrame
     {
         int r, c;
         Position p;
+        // Player is playing as Black
         if (id == 1)
         {
             r = blackToWhite.get(t.position.row);
@@ -203,7 +204,7 @@ public class ChessView extends JFrame
             p = t.position;
         }
 
-        data.calculateValidMoves(Position.convertToSingleArray(p));
+        data.calculateValidMoves(p);
     }
 
     /**
@@ -211,42 +212,27 @@ public class ChessView extends JFrame
      * tile that does not have a piece of their color
      * (selecting a tile that is their color after a piece has been
      * selected will simply select the new piece). And the model (server) will validate
-     * that move. If the model finds it valid it will let both clients know that I move
+     * that move. If the model finds it valid it will let both clients know that a move
      * has been made.
      * @param t - the tile containing a spot to move to
      */
     public void validateMove(Tile t)
     {
-        String s, e;
-        int r1, r2, c1, c2, start, end;
+        Position p;
+        int row, col;
+        // If the player is playing as black
         if (id == 1)
         {
-            r1 = blackToWhite.get(currentTile.position.row);
-            c1 = blackToWhite.get(currentTile.position.col);
-            r2 = blackToWhite.get(t.position.row);
-            c2 = blackToWhite.get(t.position.col);
-            Position startPos = new Position(r1, c1);
-            Position endPos = new Position(r2, c2);
-            start = Position.convertToSingleArray(startPos);
-            end = Position.convertToSingleArray(endPos);
-
+            row = blackToWhite.get(t.position.row);
+            col = blackToWhite.get(t.position.col);
+            p = new Position(row, col);
         }
         else
         {
-            start = Position.convertToSingleArray(currentTile.position);
-            end = Position.convertToSingleArray(t.position);
+            p = t.position;
         }
 
-        if (start < 10)
-        {
-            s = "0" + start;
-        }
-        else
-        {
-            s = Integer.toString(start);
-        }
-
-        data.validateMove(end);
+        data.validateMove(p);
         currentTile.clearBorder();
         currentTile = null;
         pieceClicked = false;

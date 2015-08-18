@@ -241,14 +241,14 @@ public class ChessModel implements ViewListener
         System.out.println("Getting Valid");
         // It is not possible for this to return null since any
         // square a user clicks will have proper row and col values
-        if (!getPieceAt(row,col).isEmpty)
+        if (!getPieceAt(row, col).isEmpty)
         {
             currentPiece = board[row][col];
             System.out.println(currentPiece.pieceName);
             currentValidMoves = currentPiece.getValidMoves();
             for (Position p : currentValidMoves)
             {
-                System.out.println(Position.convertToSingleArray(p));
+                System.out.println(p.toString());
             }
         }
         else

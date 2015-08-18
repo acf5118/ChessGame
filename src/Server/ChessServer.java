@@ -8,20 +8,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * Server.ChessServer.java
- *
- * Version:
- * $Id$
- * 
- * Revision:
- * $Log$
- */
-
-/**
  * @author Adam Fowles
  *
  */
-public class ChessServer {
+public class ChessServer
+{
 
 	/**
 	 * Main program that runs the server
@@ -29,7 +20,8 @@ public class ChessServer {
 	 * @throws IOException hopefully this is never thrown
 	 * since there will be nothing to catch the error
 	 */
-	public static void main (String[] args) throws Exception {
+	public static void main (String[] args) throws Exception
+    {
 
 		if (args.length != 2) {
 			System.err.println("Usage: java Server.ChessServer host port");

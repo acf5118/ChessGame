@@ -83,10 +83,9 @@ public class ChessClient
 						//view.update();
 						break;
 					case 'm': // move from other player
-						int start = Integer.parseInt(s.substring(5,7));
-						int end = Integer.parseInt(s.substring(8,10));
-						view.movePiece(Position.convertToMultiArray(start),
-                                Position.convertToMultiArray(end));
+						Position start = new Position(s.substring(5,10));
+                        Position end = new Position(s.substring(11));
+						view.movePiece(start, end);
 						break;
 					}
 					
@@ -170,39 +169,26 @@ public class ChessClient
      * at the position on the board
      * @param position - the position of the piece to calculate valid moves for
      */
-    public void calculateValidMoves(int position)
+    public void calculateValidMoves(Position position)
     {
-        String pos = "";
-        if (position < 10)
-        {
-            pos = "0" + position;
-        }
-        else
-        {
-            pos = Integer.toString(position);
-        }
         try
         {
-            writeOut("calc " + pos);
-        } catch (IOException e) {
-            e.printStackTrace();
+            writeOut("calc " + position.toString());
         }
+        catch (IOException e) {e.printStackTrace();}
     }
 
-    public void validateMove(int position)
+    /**
+     * Ask the server to validate the move.
+     * Only sends the server the end position since it knows the starting
+     * position already from calling the method calculateValidMoves.
+     * @param position - the position to move to
+     */
+    public void validateMove(Position position)
     {
-        String s;
-        if (position < 10)
-        {
-            s = "0" + position;
-        }
-        else
-        {
-             s = Integer.toString(position);
-        }
         try
         {
-            writeOut("valid " + s);
+            writeOut("valid " + position.toString());
         }
         catch (IOException e){e.printStackTrace();}
     }

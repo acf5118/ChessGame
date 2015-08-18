@@ -3,24 +3,12 @@ package Client;
 import Model.ChessModel;
 import Model.ModelListener;
 import Model.Position;
-import javafx.geometry.Pos;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-
-/**
- * Client.ViewProxy.java
- *
- * Version:
- * $Id$
- * 
- * Revision:
- * $Log$
- */
 
 /**
  * The Client.ViewProxy for the server
@@ -56,7 +44,8 @@ public class ViewProxy implements ModelListener
 					catch(IOException e) {s = "";}
 					if (s == null)
 					{
-						System.out.println("s is null");
+						//System.out.println("s is null");
+                        continue;
 					}
 					if (!s.equals(""))
 					{
@@ -67,26 +56,16 @@ public class ViewProxy implements ModelListener
                         // calc [position]
                         // Calculate the valid moves
                         case 'c':
-                            int currentPos = Integer.parseInt(s.substring(5,7));
-                            Position p3 = Position.convertToMultiArray(currentPos);
+                            Position p3 = new Position(s.substring(5));
                             ((ChessModel)viewListener).getValidMoves(p3.row, p3.col);
                         case 'j':
                             session = s.substring(5);
                             viewListener.join(ViewProxy.this, session);
                             break;
-                        case 'm':
-                            int start = Integer.parseInt(s.substring(5,7));
-                            int end = Integer.parseInt(s.substring(8,10));
-                            Position p1 = Position.convertToMultiArray(start);
-                            Position p2 = Position.convertToMultiArray(end);
-                            //viewListener.move(ViewProxy.this, p1, p2);
-                            break;
                         case 'v':
-                            int moveToPos = Integer.parseInt(s.substring(6,8));
-                            Position p = Position.convertToMultiArray(moveToPos);
+                            Position p = new Position(s.substring(6));
                             ((ChessModel)viewListener).validateMove(p);
                             break;
-
                         default:
                             System.err.println ("Bad message");
                             break;
@@ -206,27 +185,7 @@ public class ViewProxy implements ModelListener
 	 */
 	public void moved(Position p1, Position p2)
 	{
-		String s, e;
-        int start = Position.convertToSingleArray(p1);
-        int end = Position.convertToSingleArray(p2);
-		if (start < 10)
-		{
-			s = "0" + start;
-		}
-		else
-		{
-			s = Integer.toString(start);
-		}
-		if (end < 10)
-		{
-			e = " 0" + end;
-		}
-		else
-		{
-			e = " " + Integer.toString(end);
-		}
-		sendMessage("move " + s + e);
-
+		sendMessage("move " + p1.toString() + " " + p2.toString());
 	}
 
 }

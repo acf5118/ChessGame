@@ -14,22 +14,48 @@ public class Position
         this.col = c;
     }
 
-    public static Position convertToMultiArray(int single)
+    /**
+     * Construct a position from a string representation
+     * 0-9 are represented as 00 - 09
+     * @param s - the string representation in the form "## ##"
+     */
+    public Position(String s)
     {
-        int r, c;
-        c = single % 8;
-        r = (single - c) / 8;
-        return new Position(r, c);
-    }
-
-    public static int convertToSingleArray(Position p)
-    {
-        return (p.row * 8) + p.col;
+        this.row = Integer.parseInt(s.substring(0,2));
+        this.col = Integer.parseInt(s.substring(3,5));
     }
 
     @Override
     public boolean equals(Object p)
     {
         return row == ((Position)p).row && col == ((Position)p).col;
+    }
+
+    /**
+     * Creates the string representation of a position to
+     * write out in a message
+     * @return
+     */
+    public String toString()
+    {
+        String s = "";
+        if (row < 10)
+        {
+            s = "0" + row;
+        }
+        else
+        {
+            s = Integer.toString(row);
+        }
+        s += " ";
+        if (col < 10)
+        {
+            s += "0" + col;
+        }
+        else
+        {
+            s += Integer.toString(col);
+        }
+        return s;
     }
 }
