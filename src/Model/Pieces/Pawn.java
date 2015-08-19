@@ -1,5 +1,6 @@
 package Model.Pieces;
 
+import Model.PieceEnum;
 import Model.Position;
 import Model.ChessModel;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ public class Pawn extends Piece
     public Pawn(int row, int col, int color, ChessModel model)
     {
         super(row, col, color, model);
-        pieceName = "Pawn";
+        pieceType = PieceEnum.PAWN;
     }
 
     @Override

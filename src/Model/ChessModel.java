@@ -156,6 +156,28 @@ public class ChessModel implements ViewListener
             piece.setCurrentPos(start.row, start.col);
             return;
         }
+        piece.hasMoved = true;
+
+        // Castling
+        if (piece.getPieceType() == PieceEnum.KING &&
+                (Math.abs(start.col - end.col) == 2))
+        {
+            Piece rook;
+            int col = end.col < start.col ? 0: 7;
+            int offset = end.col < start.col ? 1: -1;
+
+            rook = board[start.row][col];
+            board[start.row][col] = new Empty(start.row, col);
+            board[start.row][end.col + offset] = rook;
+            rook.setCurrentPos(start.row, end.col + offset);
+            rook.hasMoved = true;
+            Position startRook = new Position(start.row, col);
+            Position endRook = new Position(start.row, end.col + offset);
+            players[0].moved(startRook, endRook);
+            players[1].moved(startRook, endRook);
+
+        }
+
 		if (finished())
 		{
 			for (ModelListener m: players)
@@ -244,7 +266,6 @@ public class ChessModel implements ViewListener
         if (!getPieceAt(row, col).isEmpty)
         {
             currentPiece = board[row][col];
-            System.out.println(currentPiece.pieceName);
             currentValidMoves = currentPiece.getValidMoves();
             for (Position p : currentValidMoves)
             {

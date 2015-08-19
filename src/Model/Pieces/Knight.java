@@ -1,6 +1,7 @@
 package Model.Pieces;
 
 import Model.ChessModel;
+import Model.PieceEnum;
 import Model.Position;
 
 import java.util.ArrayList;
@@ -11,7 +12,11 @@ import java.util.ArrayList;
 public class Knight extends Piece
 {
     private final int[][] offsets = {{1,2},{1,-2},{2,1},{2,-1},{-1,2},{-1,-2},{-2,1},{-2,-1}};
-    public Knight(int row, int col, int color, ChessModel model) {super(row, col, color, model);}
+    public Knight(int row, int col, int color, ChessModel model)
+    {
+        super(row, col, color, model);
+        pieceType = PieceEnum.KNIGHT;
+    }
 
     @Override
     public ArrayList<Position> getValidMoves()

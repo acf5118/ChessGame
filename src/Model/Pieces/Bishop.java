@@ -1,6 +1,7 @@
 package Model.Pieces;
 
 import Model.ChessModel;
+import Model.PieceEnum;
 import Model.Position;
 import java.util.ArrayList;
 
@@ -13,6 +14,7 @@ public class Bishop extends Piece
     public Bishop(int row, int col, int color, ChessModel model)
     {
         super(row, col, color, model);
+        pieceType = PieceEnum.BISHOP;
     }
 
     @Override

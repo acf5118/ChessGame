@@ -1,4 +1,5 @@
 package Model.Pieces;
+import Model.PieceEnum;
 import Model.Position;
 import Model.ChessModel;
 import java.util.ArrayList;
@@ -14,8 +15,9 @@ public abstract class Piece
     protected ChessModel model;
     public static final int BLACK = 0;
     public static final int WHITE = 1;
-    public String pieceName = "";
+    protected PieceEnum pieceType;
     public boolean isEmpty;
+    public boolean hasMoved;
 
     public Piece(int row, int col, int color, ChessModel model)
     {
@@ -23,6 +25,7 @@ public abstract class Piece
         this.color = color;
         this.model = model;
         isEmpty = false;
+        hasMoved = false;
     }
 
     /**
@@ -80,4 +83,5 @@ public abstract class Piece
     public abstract ArrayList<Position> getValidMoves();
     public Position getCurrentPos(){return currentPos;}
     public void setCurrentPos(int row, int col){currentPos = new Position(row, col);}
+    public PieceEnum getPieceType(){return pieceType;}
 }

@@ -8,6 +8,11 @@ public class Position
     public final int row;
     public final int col;
 
+    /**
+     * Constructor for a Position
+     * @param r - row
+     * @param c - column
+     */
     public Position(int r, int c)
     {
         this.row = r;
@@ -25,7 +30,6 @@ public class Position
         this.col = Integer.parseInt(s.substring(3,5));
     }
 
-    @Override
     public boolean equals(Object p)
     {
         return row == ((Position)p).row && col == ((Position)p).col;
@@ -34,11 +38,11 @@ public class Position
     /**
      * Creates the string representation of a position to
      * write out in a message
-     * @return
+     * @return the string representation
      */
     public String toString()
     {
-        String s = "";
+        String s;
         if (row < 10)
         {
             s = "0" + row;
