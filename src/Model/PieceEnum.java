@@ -1,4 +1,4 @@
-package Client;
+package Model;
 
 /**
  * Created by Adam Fowles on 7/17/2015.
