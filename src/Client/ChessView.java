@@ -1,5 +1,6 @@
 package Client;
 
+import Model.PieceEnum;
 import Model.Position;
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -9,13 +10,14 @@ import javax.swing.*;
 import javax.swing.border.Border;
 
 /**
+ * The View for playing the Chess Game
+ * Displays the game state and acts as the controller
+ * for the user.
  * @author Adam Fowles
- *
  */
 @SuppressWarnings("serial")
 public class ChessView extends JFrame 
 {
-
 	private Tile[][] board;
 	private int id;
 	private int player, oppenent;
@@ -240,7 +242,6 @@ public class ChessView extends JFrame
 
     // Access methods
     public boolean isPieceClicked() {return pieceClicked;}
-    public int getPlayer() {return player;}
     public int getId() {return id;}
     public boolean isTurn() {return data.getTurn();}
 

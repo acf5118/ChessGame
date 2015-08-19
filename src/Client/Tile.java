@@ -4,6 +4,7 @@ package Client;
  * Created by Adam Fowles on 8/17/2015.
  */
 
+import Model.PieceEnum;
 import Model.Position;
 
 import javax.swing.*;
@@ -15,6 +16,7 @@ import java.awt.event.ActionListener;
 /**
  * A class to represent a tile on
  * the game board.
+ * @author Adam Fowles
  */
 public class Tile extends JButton
 {
