@@ -20,7 +20,7 @@ public class ChessView extends JFrame
 {
 	private Tile[][] board;
 	private int id;
-	private int player, oppenent;
+	private int player, opponent;
 	private boolean pieceClicked;
 	private ChessClient data;
 	private PieceEnum pieceSelected;
@@ -88,7 +88,7 @@ public class ChessView extends JFrame
 		if (id == 0) 
 		{
 			player = 0; // Player is white
-			oppenent = 1; // Player is black
+            opponent = 1; // Player is black
 			pK = new Position(7,4);
 			pQ = new Position(7,3);
 			oQ = new Position(0,3);
@@ -97,7 +97,7 @@ public class ChessView extends JFrame
 		else 
 		{
 			player = 1; // Player is black
-			oppenent = 0; // Player is white
+            opponent = 0; // Player is white
             pK = new Position(7,3);
             pQ = new Position(7,4);
             oQ = new Position(0,4);
@@ -106,18 +106,18 @@ public class ChessView extends JFrame
 		
 		for (int i = 0; i < 8; i++)
 		{
-			board[1][i].putPiece(PieceEnum.PAWN, oppenent);
+			board[1][i].putPiece(PieceEnum.PAWN, opponent);
             board[6][i].putPiece(PieceEnum.PAWN, player);
 		}
 
-		board[0][0].putPiece(PieceEnum.ROOK, oppenent);
-		board[0][1].putPiece(PieceEnum.KNIGHT, oppenent);
-		board[0][2].putPiece(PieceEnum.BISHOP, oppenent);
-		board[oQ.row][oQ.col].putPiece(PieceEnum.QUEEN, oppenent);
-		board[oK.row][oK.col].putPiece(PieceEnum.KING, oppenent);
-		board[0][5].putPiece(PieceEnum.BISHOP, oppenent);
-		board[0][6].putPiece(PieceEnum.KNIGHT, oppenent);
-		board[0][7].putPiece(PieceEnum.ROOK, oppenent);
+		board[0][0].putPiece(PieceEnum.ROOK, opponent);
+		board[0][1].putPiece(PieceEnum.KNIGHT, opponent);
+		board[0][2].putPiece(PieceEnum.BISHOP, opponent);
+		board[oQ.row][oQ.col].putPiece(PieceEnum.QUEEN, opponent);
+		board[oK.row][oK.col].putPiece(PieceEnum.KING, opponent);
+		board[0][5].putPiece(PieceEnum.BISHOP, opponent);
+		board[0][6].putPiece(PieceEnum.KNIGHT, opponent);
+		board[0][7].putPiece(PieceEnum.ROOK, opponent);
 
         board[7][0].putPiece(PieceEnum.ROOK, player);
         board[7][1].putPiece(PieceEnum.KNIGHT, player);
@@ -131,8 +131,7 @@ public class ChessView extends JFrame
 	}
 
 	public void initializeBoard()
-	{
-		System.out.println("look");
+    {
 		// Server sends ID as either player 1 or 2.
 		// Client looks for 0 or 1
         // TODO fix that... ^

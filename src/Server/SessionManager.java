@@ -1,13 +1,5 @@
 package Server;
-/**
- * Server.SessionManager.java
- *
- * Version:
- * $Id$
- * 
- * Revision:
- * $Log$
- */
+
 import Model.ChessModel;
 import Client.ViewListener;
 import Client.ViewProxy;
@@ -45,7 +37,6 @@ public class SessionManager implements ViewListener
 	 */
 	public void join(ViewProxy player, String name) 
 	{
-		System.out.println("this join is getting called");
 		ChessModel model = sessions.get(sessionCount);
 		if (model == null) 
 		{

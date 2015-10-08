@@ -8,19 +8,23 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
+ * The Chess Server Class
+ * listens on the port for connections and passes them
+ * off to a view proxy. Initially the view proxy is attached
+ * to the session manager until the client calls join, at which
+ * point the view proxy is attached to the chess model.
  * @author Adam Fowles
  *
  */
 public class ChessServer
 {
-
 	/**
 	 * Main program that runs the server
 	 * @param args: arg0 host, arg1 port
 	 * @throws IOException hopefully this is never thrown
 	 * since there will be nothing to catch the error
 	 */
-	public static void main (String[] args) throws Exception
+	public static void main (String[] args) throws IOException
     {
 
 		if (args.length != 2) {
